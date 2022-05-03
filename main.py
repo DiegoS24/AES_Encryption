@@ -3,6 +3,8 @@
 # date due: May 5, 2022
 # description: This is an AES implementation that will read out to a file
 #              the cycles made throughout the AES process.
+# if asked again in an interview about a time you thought outside the box for a project.
+# maybe we could mention how you implemented a regex when reading in file input instead of stripping specific characters
 
 # plaintext_file = input("Enter the name of the plaintext input file: ")
 # key_file = input("Enter the name of the input key file: ")
@@ -25,7 +27,7 @@ o_readout = open('output1.txt', 'w')
 
 plaintext = p_readin.readlines()
 key: str = k_readin.readline()
-temp = list()
+
 new_plaintext: list[str] = list()
 
 p_readin.close()
@@ -47,6 +49,9 @@ for line in plaintext:
 # the for loop above 'wastes' time, a regex would be better. optimize this later. gotta brush up on regexs
 print(key + '\n')
 
+temp = list()
+temp_list = list()
+
 start = ord('A')
 for line in new_plaintext:
     # need to split the message to the length of the key
@@ -58,14 +63,32 @@ for line in new_plaintext:
             shift = ord(k) - start
             pos = start + (ord(letter) - start + shift) % 26
             temp.append(chr(pos))
-ciphertext = ''.join(temp)
+    temp_list.append(temp)
+
+for line in temp_list:
+    ciphertext = ''.join(line)
+
 print("Substitution: \n" + ciphertext)
 o_readout.write("\nSubstitution: \n" + ciphertext)
 pad_cipher = ciphertext
-while len(ciphertext) % 16 != 0:
+
+# fixed infinite loop issue
+while len(pad_cipher) % 16 > 0:
     pad_cipher += 'A'
+pre_shift = list()
+# separate the string every 16 characters
+# then repeat for every four characters.
+# dividing it like this should create a 3d matrix with 4 lists
+# of 16 chars which are then divided every 4 chars
 
-
+# for line in new_plaintext:
+#     i = 0
+#     split_message = [line[i:i + 16] for i in range(0, 80, 16)]
+#     for each_split in split_message:
+#         for letter, k in zip(each_split, key):
+#             shift = ord(k) - start
+#             pos = start + (ord(letter) - start + shift) % 26
+#             temp.append(chr(pos))
 
 o_readout.close()
 p_readin.close()
