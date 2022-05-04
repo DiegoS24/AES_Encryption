@@ -46,7 +46,7 @@ for line in plaintext:
     new_plaintext.append(newline)
     o_readout.write(newline + '\n')
     print(newline)
-# the for loop above 'wastes' time, a regex would be better. optimize this later. gotta brush up on regexs
+# the for loop above 'wastes' time, a regex would be better. optimize this later. gotta brush up on regexes
 print(key + '\n')
 
 temp_list = list()
@@ -104,6 +104,7 @@ o_readout.write("\nOutput:\n")
 for line in pad_cipher:
     o_readout.write(line + '\n')
     print(line)
+
 # the section below will be part D where we shift rows
 # separate the string every 16 characters   CHECK
 # then repeat for every four characters.
@@ -111,6 +112,8 @@ for line in pad_cipher:
 # of 16 chars which are then divided every 4 chars
 pre_shift_matrix = list()
 print('\n')
+
+# the for loop below separates all the previous strings into substrings of 4 characters
 for line in pad_cipher:
     i = 0
     line_list = list()
@@ -122,14 +125,23 @@ for line in pad_cipher:
         # for easier iteration and shift
     pre_shift_matrix.append(line_list)
 
-print(pre_shift_matrix)
+print("Padding:")
+o_readout.write("Padding:\n")
+for line in pre_shift_matrix:
+    for section in line:
+        for cypher in section:
+            print(cypher)
+            o_readout.write(cypher + '\n')
+        print('\n')
+        o_readout.write('\n')
 # shift matrix is what we will use to do the actual shifting in the rows, we are going to have to use len() and range() to iterate through
 
 shifted_matrix = list()
 
+# this for loop does the actual shifting of rows
 for line in pre_shift_matrix:
     line_list = list()
-    for section_number in range(0,len(line)):
+    for section_number in range(0, len(line)):
         section_list = list()
         # print(line[section_number][0])
         if section_number == 0:
@@ -153,26 +165,22 @@ for line in pre_shift_matrix:
                 temp = line[char][section_number][3:] + line[char][section_number][:3]
                 section_list.append(temp)
             line_list.append(section_list)
-        shifted_matrix.append(line_list)
+    shifted_matrix.append(line_list)
 
-pre_shift_matrix.clear()
-# we need to clear lists we dont need anymore because i am making a lot of lists which is very resource intensive
-# so once we are done with a list, lets delete it because we no longer need it
+# we need to clear lists we don't need anymore because I am making a lot of lists which is very resource intensive
+# so once we are done with a list, lets delete it because we no longer need if
 # I now need to write this new shifted list out to the o_readout file
 
-print(shifted_matrix)
-
-            # here we are in the char int of the section object in the line object of the shift matrix
-
-
-
-#     i = 0
-#     split_message = [line[i:i + 16] for i in range(0, 80, 16)]
-#     for each_split in split_message:
-#         for letter, k in zip(each_split, key):
-#             shift = ord(k) - start
-#             pos = start + (ord(letter) - start + shift) % 26
-#             temp.append(chr(pos))
+print("Shift Rows:")
+o_readout.write("Shift Rows:\n")
+for line in shifted_matrix:
+    for section_number in range(0, len(line)):
+        for char in range(0, len(line[section_number])):
+            print(line[char][section_number])
+            o_readout.write(line[char][section_number] + "\n")
+        print('\n')
+        o_readout.write('\n')
+# part D successfully written out to o_readout file
 
 o_readout.close()
 p_readin.close()
