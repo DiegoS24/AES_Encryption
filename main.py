@@ -49,29 +49,36 @@ for line in plaintext:
 # the for loop above 'wastes' time, a regex would be better. optimize this later. gotta brush up on regexs
 print(key + '\n')
 
-temp = list()
 temp_list = list()
 
+# the code below up until line 77 is the substitution
 start = ord('A')
 for line in new_plaintext:
     # need to split the message to the length of the key
     # split_message = [plaintext[i:i + len(key)] for i in range(0, len(plaintext), len(key))] # start, end, step
     i = 0
     split_message = [line[i:i + 16] for i in range(0, 80, 16)]
+    temp = list()
     for each_split in split_message:
         for letter, k in zip(each_split, key):
             shift = ord(k) - start
             pos = start + (ord(letter) - start + shift) % 26
             temp.append(chr(pos))
     temp_list.append(temp)
-
+ciphertext = list()
 for line in temp_list:
-    ciphertext = ''.join(line)
+    ciph_temp = ''.join(line)
+    ciphertext.append(ciph_temp)
 
-print("Substitution: \n" + ciphertext)
-o_readout.write("\nSubstitution: \n" + ciphertext)
+print("Substitution: ")
+o_readout.write("\nSubstitution: \n")
+for line in ciphertext:
+    o_readout.write(line + '\n')
+# write out is working nicely now, this works for files with multiple lines now
+
 pad_cipher = ciphertext
-
+for line in ciphertext:
+    print(line)
 # fixed infinite loop issue
 while len(pad_cipher) % 16 > 0:
     pad_cipher += 'A'
